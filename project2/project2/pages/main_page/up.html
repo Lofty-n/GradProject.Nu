@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحديث الحجز</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.ibb.co/rMTRPrD/IMG-8440.jpg" alt="New Logo" class="logo" style="margin-bottom: 10px;">
+            <nav class="nav">
+                <a href="/pages/system/index.html" class="nav-link">الرئيسية</a>
+                <a href="/pages/system/profile.html" class="nav-link">الملف الشخصي</a>
+                <a href="/pages/system/contact.html" class="nav-link">تواصل معنا</a>
+                <a href="/pages/system/ab.html" class="nav-link">عن النظام</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h2>تحديث الحجز</h2>
+
+        <div class="note">
+            <p><strong>ملاحظات:</strong><br>
+            1. لا يمكن تعديل الحجز قبل 24 ساعة من موعده. <br>
+            2. في حالة عدم حضورك للمواعيد عدة مرات، سيتم حظر وصولك للموقع.</p>
+        </div>
+
+        <form id="delete-reservation-form">
+            <div class="form-group">
+                <label for="appointment-id">رقم الحجز:</label>
+                <input type="text" id="appointment-id" name="appointment-id" placeholder="أدخل رقم الحجز" required>
+            </div>
+            <button type="submit">حذف الحجز</button>
+            <button type="button" onclick="window.location.href='profile.html'">إلغاء</button>
+        </form>
+
+        <p id="message" style="color: red;"></p>
+
+        <p class="info-message" style="margin-top: 20px;">
+            يمكنك الحجز مرة أخرى بعد حذف الحجز من الصفحة الرئيسية - حجز موعد.
+        </p>
+    </main>
+
+    <script>
+        document.getElementById("delete-reservation-form").onsubmit = function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+            
+            const appointmentId = document.getElementById("appointment-id").value;
+
+            // هنا يمكن إضافة عمليات التحقق من الحجز
+            if (appointmentId.trim() === "") {
+                document.getElementById("message").innerText = "يرجى إدخال رقم الحجز.";
+                return;
+            }
+
+            // في حالة النجاح في الحذف، يمكن إجراء أي عملية أخرى هنا
+            document.getElementById("message").innerText = "تم حذف الحجز بنجاح.";
+        };
+    </script>
+</body>
+</html>

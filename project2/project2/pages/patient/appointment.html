@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد طبي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body, html {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .wave-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('wave-bg.png') no-repeat center center/cover;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .arabic-title {
+            font-size: 2.5rem;
+            color: #c49b3c;
+            margin-bottom: 10px;
+        }
+
+        .arabic-subtitle {
+            font-size: 1.2rem;
+            color: #1a237e;
+            margin-bottom: 30px;
+        }
+
+        .selection-container {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        select {
+            padding: 10px;
+            border: 2px solid #c49b3c;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #0a0a0a;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            border-color: #b28a35;
+            outline: none;
+        }
+
+        .time-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .time-slot {
+            padding: 15px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-slot.available {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .time-slot.unavailable {
+            background-color: #ffebee;
+            border-color: #ef5350;
+            color: #c62828;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background-color: #c49b3c;
+            border-color: #c49b3c;
+            color: white;
+        }
+
+        .time-slot.available:hover {
+            background-color: #c8e6c9;
+        }
+
+        .time-slot.selected:hover {
+            background-color: #b28a35;
+        }
+
+        .confirm-button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #c49b3c;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button:hover {
+            background-color: #b28a35;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <a href="profile.html" class="top-bar-link">الملف الشخصي</a>
+            <a href="help.html" class="top-bar-link">المساعدة</a>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.ibb.co/rMTRPrD/IMG-8440.jpg" alt="New Logo" class="logo" style="margin-bottom: 10px;">
+            <nav class="nav">
+                <a href="index.html" class="nav-link">الرئيسية</a>
+                <a href="appointment.html" class="nav-link">حجز موعد</a>
+                <a href="sur.html" class="nav-link">الأقسام</a>
+                <a href="contact.html" class="nav-link">تواصل معنا</a>
+                <a href="ab.html" class="nav-link">عن النظام</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="wave-bg"></div>
+        <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
+            <h1 class="arabic-title">حجز موعد طبي</h1>
+            <p class="arabic-subtitle">اختر القسم، اليوم والوقت المناسب لحجز موعدك الطبي</p>
+
+            <div class="selection-container">
+                <label for="department-select">اختر القسم: </label>
+                <select id="department-select">
+                    <option value="radiology">قسم الأشعة</option>
+                    <option value="dentistry">قسم الأسنان</option>
+                    <option value="general">قسم عام</option>
+                </select>
+            </div>
+            
+            <div class="selection-container">
+                <label for="date-select">اختر اليوم: </label>
+                <select id="date-select">
+                </select>
+            </div>
+
+            <div class="time-selection" id="time-slots">
+            </div>
+
+            <button class="confirm-button" style="display: none;">تأكيد الحجز</button>
+        </div>
+    </main>
+
+    <script>
+        const today = new Date();
+        const dateSelect = document.getElementById('date-select');
+        const departmentSelect = document.getElementById('department-select');
+        const timeSlotsDiv = document.getElementById('time-slots');
+        const confirmButton = document.querySelector('.confirm-button');
+
+        for (let i = 0; i < 7; i++) {
+            let nextDate = new Date(today);
+            nextDate.setDate(today.getDate() + i);
+            const dayNames = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+            const dayName = dayNames[nextDate.getDay()];
+            const option = document.createElement('option');
+            option.value = nextDate.toISOString().split('T')[0];
+            option.textContent = `${dayName} - ${nextDate.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            dateSelect.appendChild(option);
+        }
+
+        dateSelect.addEventListener('change', (event) => {
+            const selectedDate = event.target.value;
+            showTimeSlots(selectedDate, departmentSelect.value);
+        });
+
+        departmentSelect.addEventListener('change', (event) => {
+            const selectedDate = dateSelect.value;
+            showTimeSlots(selectedDate, event.target.value);
+        });
+
+        function showTimeSlots(date, department) {
+            timeSlotsDiv.innerHTML = '';
+            confirmButton.style.display = 'none';
+
+            const timeSlots = [
+                { time: '09:00 ص', available: true },
+                { time: '10:00 ص', available: true },
+                { time: '11:00 ص', available: false },
+                { time: '12:00 م', available: true },
+                { time: '01:00 م', available: false },
+                { time: '02:00 م', available: true },
+                { time: '03:00 م', available: false },
+                { time: '04:00 م', available: true },
+                { time: '05:00 م', available: false },
+                { time: '06:00 م', available: true }
+            ];
+
+            timeSlots.forEach(slot => {
+                const timeSlotDiv = document.createElement('div');
+                timeSlotDiv.className = 'time-slot ' + (slot.available ? 'available' : 'unavailable');
+                timeSlotDiv.textContent = slot.time;
+                
+                if (slot.available) {
+                    timeSlotDiv.addEventListener('click', () => {
+                        const allAvailableSlots = document.querySelectorAll('.time-slot.available');
+                        allAvailableSlots.forEach(s => s.classList.remove('selected'));
+                        timeSlotDiv.classList.add('selected');
+                        confirmButton.style.display = 'block';
+                    });
+                }
+                timeSlotsDiv.appendChild(timeSlotDiv);
+            });
+
+            timeSlotsDiv.style.display = 'grid';
+        }
+    </script>
+</body>
+</html>
