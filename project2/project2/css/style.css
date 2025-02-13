@@ -6,14 +6,16 @@
 }
 
 body {
-    font-family: 'Tajawal', Arial, sans-serif;
+    font-family: 'Tajawal', sans-serif;
     direction: rtl;
+    background-color: #f9f9f9;
 }
 
 .top-bar {
-    background-color: #1a335c;
+    background-color: #333;
     color: white;
-    padding: 8px 0;
+    padding: 10px;
+    text-align: center;
 }
 
 .top-bar-content {
@@ -43,14 +45,18 @@ body {
 
 .top-bar-link {
     color: white;
+    margin: 0 10px;
     text-decoration: none;
-    font-size: 14px;
+}
+
+.top-bar-link:hover {
+    text-decoration: underline;
 }
 
 .header {
-    background: white;
-    padding: 15px 0;
-    border-bottom: 1px solid #e5e5e5;
+    background-color: #c49b3c;
+    padding: 20px;
+    text-align: center;
 }
 
 .header-content {
@@ -61,8 +67,8 @@ body {
     padding: 0 20px;
 }
 
-.logo {
-    height: 60px;
+.header .logo {
+    max-width: 100px;
 }
 
 .nav {
@@ -78,8 +84,11 @@ body {
 }
 
 .main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
-    min-height: calc(100vh - 180px);
     position: relative;
     padding: 40px 20px;
     overflow: hidden;
@@ -157,6 +166,42 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+}
+
+.login-form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="phone"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #c49b3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b38a2e;
 }
 
 @media (max-width: 768px) {

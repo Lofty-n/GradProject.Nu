@@ -7,9 +7,7 @@ const pool = mysql.createPool({
    database: 'Project2_DB'
 }).promise()
 
-async function GetTable() {
-   const [rows] = await pool.query('SELECT * FROM User')
+async function InsertValue(value) {
+   const [rows] = await pool.query('INSERT INTO user (Value) VALUES (? , ?, ? ,? , ?)', [value])
    return rows
 }
-const Notes = await GetTable()
-console.log(Notes)
